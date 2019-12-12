@@ -271,6 +271,13 @@ class LTI_Consumer {
         $current_user = wp_get_current_user();
         $post = get_post( $_GET[ 'p' ] );
         $plugin_data = get_plugin_data( self::$base_path . '/classcube-lti-consumer.php' );
+
+	$test="Learner";
+
+	if (is_user_logged_in() && $current_user->ID == $post->post_author)  {
+	    $test="Instructor";
+	}
+
         $post_data = [
             'lti_message_type' => 'basic-lti-launch-request',
             'lti_version' => 'LTI-1p0',
@@ -280,7 +287,7 @@ class LTI_Consumer {
             'resource_link_description' => $post->post_title,
             'context_title' => get_bloginfo( 'name' ),
             'context_id' => get_bloginfo( 'home' ),
-            'roles' => 'Learner',
+            'roles' => $test,
             'user_id' => md5( get_bloginfo( 'home' ) . !empty( $current_user->ID ) ? $current_user->ID : 0 ),
             'launch_presentation_locale' => get_locale(),
             'tool_consumer_info_product_family_code' => 'wordpress',
